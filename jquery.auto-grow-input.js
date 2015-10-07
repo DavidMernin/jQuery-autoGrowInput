@@ -10,6 +10,7 @@
     $.fn.autoGrowInput = function(options){
         var o = $.extend({ maxWidth: 500, minWidth: 20, comfortZone: 0 }, options),
             event = 'oninput' in document.createElement('input') ? 'input' : 'keydown';
+        $('span.autogrowspan').remove();
         this.each(function(){
             var input = $(this),
                 minWidth = o.minWidth || input.width(),
@@ -26,7 +27,7 @@
                     letterSpacing: input.css('letterSpacing'),
                     whiteSpace: 'nowrap',
                     ariaHidden: true
-                }),
+                }).addClass('autogrowspan'),
                 check = function(e){
                     if (val === (val = input.val()) && !e.type == 'autogrow') return;
                     if (!val) val = input.attr('placeholder') || '';
@@ -37,6 +38,7 @@
                     if (newWidth != input.width()) input.width(newWidth);
                 };
             span.insertAfter(input);
+            input.off(event+'.autogrow autogrow');
             input.on(event+'.autogrow autogrow', check);
             // init on page load
             check();
